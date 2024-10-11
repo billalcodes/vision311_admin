@@ -98,7 +98,7 @@ const ChartTwo: React.FC = () => {
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Profit this week
+            Requests this week
           </h4>
         </div>
         <div>

@@ -10,7 +10,7 @@ const ChartOne: React.FC = () => {
       data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 75],
     },
     {
-      name: "Due Amount",
+      name: "Closed requests",
       data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
     },
   ];

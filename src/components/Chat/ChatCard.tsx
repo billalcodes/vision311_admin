@@ -62,6 +62,15 @@ const chatData: Chat[] = [
     textCount: 0,
     dot: 3,
   },
+  {
+    active: false,
+    avatar: null,
+    name: "Rabiya",
+    text: "Hello, how are you?",
+    time: "Oct 23",
+    textCount: 0,
+    dot: 3,
+  },
 ];
 
 // Generic user icon component

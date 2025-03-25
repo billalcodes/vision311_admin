@@ -34,7 +34,7 @@ export default function RootLayout({
           href="/images/logo/logo.png"
         />
 
-<head><head>
+<head>
   <script dangerouslySetInnerHTML={{ __html: `
     (function(w,d,s,pc){
       pc.projectId = "lawfirm-9229d532-e2cf-4c59-98f2-aaca28d78b56";

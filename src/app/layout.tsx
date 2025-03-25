@@ -34,10 +34,10 @@ export default function RootLayout({
           href="/images/logo/logo.png"
         />
 
-<head>
+<head><head>
   <script dangerouslySetInnerHTML={{ __html: `
     (function(w,d,s,pc){
-      pc.projectId = "lawfirm-19d6962b-68a7-46d4-87d0-0f4211b19104";
+      pc.projectId = "lawfirm-9229d532-e2cf-4c59-98f2-aaca28d78b56";
       w.PrecisionConversionsConfig = pc;
       var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s);
@@ -47,7 +47,6 @@ export default function RootLayout({
     })(window,document,"script",{});
   ` }} />
 </head>
-
       </head>
       <body suppressHydrationWarning={true}>
         {loading ? <Loader /> : children}

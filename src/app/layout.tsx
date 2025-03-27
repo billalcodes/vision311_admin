@@ -36,7 +36,7 @@ export default function RootLayout({
 <head>
   <script dangerouslySetInnerHTML={{ __html: `
     (function(w,d,s,pc){
-      pc.projectId = "lawfirm-6e3e70fa-39e2-47f9-afdd-62f2210f5a9a";
+      pc.projectId = "lawfirm-46234f7a-13ba-4cdf-8510-f5d7d2cabda4";
       w.PrecisionConversionsConfig = pc;
       var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s);

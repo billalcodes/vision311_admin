@@ -33,9 +33,11 @@ export default function RootLayout({
           rel="icon"
           href="/images/logo/logo.png"
         />
- <script dangerouslySetInnerHTML={{ __html: `
+
+<head>
+  <script dangerouslySetInnerHTML={{ __html: `
     (function(w,d,s,pc){
-      pc.projectId = "lawfirm-6675be4f-49e8-4624-801b-0a4162439424";
+      pc.projectId = "lawfirm-4dfbb958-0249-4f51-8103-f2f7649fc5cb";
       w.PrecisionConversionsConfig = pc;
       var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s);
@@ -44,6 +46,7 @@ export default function RootLayout({
       f.parentNode.insertBefore(j,f);
     })(window,document,"script",{});
   ` }} />
+</head>
       </head>
       <body suppressHydrationWarning={true}>
         {loading ? <Loader /> : children}

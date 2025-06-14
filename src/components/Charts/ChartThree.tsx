@@ -1,23 +1,33 @@
+// src/components/Charts/ChartThree.tsx
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import { useDepartmentStats } from "@/hooks/useAPIService";
 
 const ChartThree: React.FC = () => {
-  const series = [65, 34, 12, 56];
+  const [timeframe, setTimeframe] = useState<'monthly' | 'yearly'>('monthly');
+  const { data, loading, error } = useDepartmentStats(timeframe);
+
+  // Default colors for departments
+  const departmentColors = ["#ff4b25", "#2cff25", "#25bdff", "#6425ff", "#ff25c8", "#fdff25"];
+  
+  // Default data if API hasn't loaded yet
+  const series = data?.counts || [65, 34, 12, 56];
+  const labels = data?.departments || ["CDA", "FBR", "NHA", "ITP"];
+  const percentages = data?.percentages || [65, 34, 12, 56];
 
   const options: ApexOptions = {
     chart: {
       fontFamily: "Satoshi, sans-serif",
       type: "donut",
     },
-    colors: ["#ff4b25", "#2cff25", "#25bdff", "#6425ff"],
-    labels: ["CDA", "FBR", "NHA", "ITP"],
+    colors: departmentColors.slice(0, labels.length),
+    labels: labels,
     legend: {
       show: false,
       position: "bottom",
     },
-
     plotOptions: {
       pie: {
         donut: {
@@ -64,6 +74,10 @@ const ChartThree: React.FC = () => {
     ],
   };
 
+  const handleTimeframeChange = (value: string) => {
+    setTimeframe(value as 'monthly' | 'yearly');
+  };
+
   return (
     <div className="col-span-12 rounded-[10px] bg-white px-7.5 pb-7 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-5">
       <div className="mb-9 justify-between gap-4 sm:flex">
@@ -73,54 +87,46 @@ const ChartThree: React.FC = () => {
           </h4>
         </div>
         <div>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
+          <DefaultSelectOption 
+            options={["Monthly", "Yearly"]} 
+            onChange={handleTimeframeChange}
+            defaultValue={timeframe === 'monthly' ? "Monthly" : "Yearly"}
+          />
         </div>
       </div>
 
       <div className="mb-8">
-        <div className="mx-auto flex justify-center">
-          <ReactApexChart options={options} series={series} type="donut" />
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-64 text-red">
+            Error loading data
+          </div>
+        ) : (
+          <div className="mx-auto flex justify-center">
+            <ReactApexChart options={options} series={series} type="donut" />
+          </div>
+        )}
       </div>
 
       <div className="mx-auto w-full max-w-[350px]">
         <div className="-mx-7.5 flex flex-wrap items-center justify-center gap-y-2.5">
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-red-400"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> CDA </span>
-                <span> 65% </span>
-              </p>
+          {labels.map((label, index) => (
+            <div key={label} className="w-full px-7.5 sm:w-1/2">
+              <div className="flex w-full items-center">
+                <span 
+                  className="mr-2 block h-3 w-full max-w-3 rounded-full" 
+                  style={{ backgroundColor: departmentColors[index % departmentColors.length] }}
+                ></span>
+                <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
+                  <span> {label} </span>
+                  <span> {percentages[index]}% </span>
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-green-light"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> FBR </span>
-                <span> 34% </span>
-              </p>
-            </div>
-          </div>
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-violet-600"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> ITP </span>
-                <span> 45% </span>
-              </p>
-            </div>
-          </div>
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-400"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> NHA </span>
-                <span> 12% </span>
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

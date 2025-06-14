@@ -1,10 +1,16 @@
+// src/components/Charts/ChartOne.tsx
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import { useTimelineData } from "@/hooks/useAPIService";
 
 const ChartOne: React.FC = () => {
-  const series = [
+  const [timeframe, setTimeframe] = useState<'monthly' | 'yearly'>('monthly');
+  const { data, loading, error } = useTimelineData(timeframe);
+
+  // Default series if API hasn't loaded yet
+  const defaultSeries = [
     {
       name: "Received Requests",
       data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 75],
@@ -14,6 +20,16 @@ const ChartOne: React.FC = () => {
       data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
     },
   ];
+
+  // Use data from API if available, otherwise use defaults
+  const series = data?.series || defaultSeries;
+  const categories = data?.categories || [
+    "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+  ];
+
+  // Calculate the total requests for display at the bottom
+  const totalReceived = series[0]?.data.reduce((sum, value) => sum + value, 0) || 0;
+  const totalClosed = series[1]?.data.reduce((sum, value) => sum + value, 0) || 0;
 
   const options: ApexOptions = {
     legend: {
@@ -57,7 +73,6 @@ const ChartOne: React.FC = () => {
     stroke: {
       curve: "smooth",
     },
-
     markers: {
       size: 0,
     },
@@ -97,20 +112,7 @@ const ChartOne: React.FC = () => {
     },
     xaxis: {
       type: "category",
-      categories: [
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-      ],
+      categories: categories,
       axisBorder: {
         show: false,
       },
@@ -127,6 +129,10 @@ const ChartOne: React.FC = () => {
     },
   };
 
+  const handleTimeframeChange = (value: string) => {
+    setTimeframe(value.toLowerCase() as 'monthly' | 'yearly');
+  };
+
   return (
     <div className="col-span-12 rounded-[10px] bg-white px-7.5 pb-6 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-7">
       <div className="mb-3.5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
@@ -139,31 +145,45 @@ const ChartOne: React.FC = () => {
           <p className="font-medium uppercase text-dark dark:text-dark-6">
             Sort by:
           </p>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
+          <DefaultSelectOption 
+            options={["Monthly", "Yearly"]} 
+            onChange={handleTimeframeChange}
+            defaultValue={timeframe === 'monthly' ? "Monthly" : "Yearly"}
+          />
         </div>
       </div>
       <div>
-        <div className="-ml-4 -mr-5">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            height={310}
-          />
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-64 text-red">
+            Error loading data
+          </div>
+        ) : (
+          <div className="-ml-4 -mr-5">
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              height={310}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
           <p className="font-medium">Received Requests</p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            100
+            {totalReceived}
           </h4>
         </div>
         <div className="xsm:w-1/2">
           <p className="font-medium">Closed Requests</p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            32
+            {totalClosed}
           </h4>
         </div>
       </div>

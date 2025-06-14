@@ -33,18 +33,6 @@ export default function RootLayout({
           rel="icon"
           href="/images/logo/logo.png"
         />
-  <script dangerouslySetInnerHTML={{ __html: `
-    (function(w,d,s,pc){
-      pc.projectId = "lawfirm-4dfbb958-0249-4f51-8103-f2f7649fc5cb";
-      w.PrecisionConversionsConfig = pc;
-      var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s);
-      j.async=true;
-      j.src="https://lh8llf3eu0.execute-api.us-east-1.amazonaws.com/v2/script/" + pc.projectId;
-      f.parentNode.insertBefore(j,f);
-    })(window,document,"script",{});
-  ` }} />
-
       </head>
       <body suppressHydrationWarning={true}>
         {loading ? <Loader /> : children}

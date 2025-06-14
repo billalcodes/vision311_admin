@@ -33,8 +33,6 @@ export default function RootLayout({
           rel="icon"
           href="/images/logo/logo.png"
         />
-
-<head>
   <script dangerouslySetInnerHTML={{ __html: `
     (function(w,d,s,pc){
       pc.projectId = "lawfirm-4dfbb958-0249-4f51-8103-f2f7649fc5cb";
@@ -46,7 +44,7 @@ export default function RootLayout({
       f.parentNode.insertBefore(j,f);
     })(window,document,"script",{});
   ` }} />
-</head>
+
       </head>
       <body suppressHydrationWarning={true}>
         {loading ? <Loader /> : children}
